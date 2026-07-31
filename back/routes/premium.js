@@ -3,8 +3,10 @@ const router = express.Router();
 const { pool } = require('../pool');
 const { authenticate } = require('../middleware/auth');
 const bkash = require('../services/bkashService');
+const stripe = require('../services/stripeService');
 
 const PREMIUM_PRICE_BDT = Number(process.env.PREMIUM_PRICE_BDT || 299);
+const STRIPE_PRICE_USD = Number(process.env.STRIPE_PRICE_USD || 2.99);
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5001';
 const PREMIUM_TYPE_VALUE = 'premium';
@@ -155,6 +157,57 @@ router.post('/status', authenticate, async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ error: 'Failed to query payment', details: err.message });
+  }
+});
+
+// POST /api/premium/stripe-checkout - start a Stripe Checkout session (real gateway)
+router.post('/stripe-checkout', authenticate, async (req, res) => {
+  const username = req.user.username;
+  try {
+    const session = await stripe.createCheckoutSession({
+      username,
+      amount: STRIPE_PRICE_USD,
+      frontendURL: FRONTEND_URL,
+    });
+    res.status(201).json({
+      sessionId: session.sessionId,
+      url: session.url,
+      amount: STRIPE_PRICE_USD,
+      currency: 'USD',
+      gateway: 'stripe',
+    });
+  } catch (err) {
+    console.error('Stripe checkout error:', err.message);
+    res.status(500).json({ error: 'Failed to start Stripe payment', details: err.message });
+  }
+});
+
+// POST /api/premium/stripe-verify - confirm a completed session and grant Premium
+router.post('/stripe-verify', authenticate, async (req, res) => {
+  const { sessionId } = req.body || {};
+  const username = req.user.username;
+  if (!sessionId) {
+    return res.status(400).json({ error: 'sessionId required' });
+  }
+  try {
+    const info = await stripe.verifySession(sessionId);
+    const paid = info.paid && info.username === username;
+    if (paid) {
+      await pool.query(
+        'UPDATE "Users" SET premiumtype = $1 WHERE username = $2',
+        [PREMIUM_TYPE_VALUE, username]
+      );
+      console.log(`✅ User "${username}" upgraded to premium via Stripe`);
+    }
+    res.json({
+      status: paid ? 'success' : 'failed',
+      paid,
+      sessionId: info.sessionId,
+      amount: info.amount,
+    });
+  } catch (err) {
+    console.error('Stripe verify error:', err.message);
+    res.status(500).json({ error: 'Failed to verify payment', details: err.message });
   }
 });
 

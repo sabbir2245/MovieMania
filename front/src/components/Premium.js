@@ -26,26 +26,56 @@ function Premium() {
 
   const isLoggedIn = !!loggedInUser;
 
-  // ---- 1) Read bKash redirect result from URL (?status=success&trxID=...) ----
+  // ---- 1) Read Stripe redirect result from URL (?status=success&session_id=...) ----
   useEffect(() => {
     const status = searchParams.get('status');
     const trxID = searchParams.get('trxID');
     const amount = searchParams.get('amount');
-    console.log('[DEBUG] URL params -> status:', status, '| trxID:', trxID, '| amount:', amount);
+    const sessionId = searchParams.get('session_id');
+    console.log('[DEBUG] URL params -> status:', status, '| session_id:', sessionId, '| trxID:', trxID, '| amount:', amount);
 
-    if (status === 'success') {
+    // After a Stripe Checkout redirect, confirm the session and grant Premium.
+    if (sessionId) {
+      confirmStripeSession(sessionId);
+    } else if (status === 'success') {
       setNotice({ type: 'success', text: `Payment complete! Transaction ID: ${trxID || 'N/A'}${amount ? ` (BDT ${amount})` : ''}` });
-    } else if (status === 'failed') {
+    } else if (status === 'failed' || status === 'cancelled') {
       setNotice({ type: 'error', text: 'Payment was not completed. Please try again.' });
     } else if (status === 'error') {
       setNotice({ type: 'error', text: 'Something went wrong processing your payment.' });
     }
-    // Refresh status after returning from bKash
+    // Refresh status after returning from the gateway
     if (isLoggedIn) {
       loadPremiumStatus();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  // Confirm a Stripe Checkout session server-side, then refresh premium status.
+  const confirmStripeSession = async (sessionId) => {
+    const token = getToken();
+    if (!token || !sessionId) return;
+    try {
+      console.log('[DEBUG] POST /api/premium/stripe-verify for session:', sessionId);
+      const res = await fetch(`${API_BASE}/api/premium/stripe-verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ sessionId }),
+      });
+      const data = await res.json();
+      console.log('[DEBUG] stripe-verify response:', data);
+      if (data.paid) {
+        setNotice({ type: 'success', text: `Payment complete! You are now Premium.${data.amount ? ` ($${data.amount})` : ''}` });
+      } else {
+        setNotice({ type: 'error', text: 'Payment could not be confirmed. Please try again.' });
+      }
+      loadPremiumStatus();
+    } catch (err) {
+      console.error('[DEBUG] stripe-verify error:', err);
+      setNotice({ type: 'error', text: 'Something went wrong confirming your payment.' });
+      loadPremiumStatus();
+    }
+  };
 
   // ---- 2) Fetch the current user's premium status ----
   const loadPremiumStatus = async () => {
@@ -83,7 +113,7 @@ function Premium() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
 
-  // ---- 3) Start a bKash payment ----
+  // ---- 3) Start a Stripe Checkout payment ----
   const handleCheckout = async () => {
     const token = getToken();
     if (!token) {
@@ -93,8 +123,8 @@ function Premium() {
     setCheckoutLoading(true);
     setError(null);
     try {
-      console.log('[DEBUG] POST /api/premium/checkout ...');
-      const res = await fetch(`${API_BASE}/api/premium/checkout`, {
+      console.log('[DEBUG] POST /api/premium/stripe-checkout ...');
+      const res = await fetch(`${API_BASE}/api/premium/stripe-checkout`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -103,9 +133,9 @@ function Premium() {
       if (!res.ok) throw new Error(data.details || data.error || 'Failed to start payment');
       setPayment(data);
 
-      // Redirect the user into the bKash payment portal
-      console.log('[DEBUG] Redirecting to bKash URL:', data.bkashURL);
-      window.location.href = data.bkashURL;
+      // Redirect the user into the Stripe Checkout gateway
+      console.log('[DEBUG] Redirecting to Stripe Checkout URL:', data.url);
+      window.location.href = data.url;
     } catch (err) {
       console.error('[DEBUG] checkout error:', err);
       setError(err.message);
@@ -115,14 +145,14 @@ function Premium() {
 
   // ---- 4) Poll payment status (optional manual check) ----
   const handleCheckStatus = async () => {
-    if (!payment?.paymentID) return;
+    if (!payment?.sessionId) return;
     const token = getToken();
     try {
-      console.log('[DEBUG] POST /api/premium/status for paymentID:', payment.paymentID);
-      const res = await fetch(`${API_BASE}/api/premium/status`, {
+      console.log('[DEBUG] POST /api/premium/stripe-verify for session:', payment.sessionId);
+      const res = await fetch(`${API_BASE}/api/premium/stripe-verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ paymentID: payment.paymentID }),
+        body: JSON.stringify({ sessionId: payment.sessionId }),
       });
       const data = await res.json();
       console.log('[DEBUG] status response:', data);
@@ -152,7 +182,7 @@ function Premium() {
     <div className="premium-page">
       <div className="premium-card">
         <h1 className="premium-title">MovieMania <span>Premium</span></h1>
-        <p className="premium-subtitle">One-time payment · Sandbox bKash</p>
+        <p className="premium-subtitle">One-time payment · Stripe (test mode)</p>
 
         {notice && (
           <div className={`notice ${notice.type}`}>{notice.text}</div>
@@ -174,18 +204,18 @@ function Premium() {
 
         {!premium?.isPremium ? (
           <div className="buy-section">
-            <p className="price">BDT 299 <span>/ one-time</span></p>
+            <p className="price">$2.99 <span>/ one-time</span></p>
             <button className="btn-primary" onClick={handleCheckout} disabled={checkoutLoading}>
               {checkoutLoading ? 'Starting payment...' : '💰 Upgrade to Premium'}
             </button>
 
             {payment && (
               <div className="payment-info">
-                <p>paymentID: <code>{payment.paymentID}</code></p>
-                {payment.bkashURL && (
+                <p>session: <code>{payment.sessionId}</code></p>
+                {payment.url && (
                   <p>
                     If you weren't redirected:{' '}
-                    <a href={payment.bkashURL} target="_blank" rel="noreferrer">Open bKash portal</a>
+                    <a href={payment.url} target="_blank" rel="noreferrer">Open Stripe Checkout</a>
                   </p>
                 )}
                 <button className="btn-secondary" onClick={handleCheckStatus}>Check payment status</button>
