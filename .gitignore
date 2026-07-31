@@ -29,3 +29,6 @@ Thumbs.db
 .env.*
 !.env.example
 **/.env
+
+# Separate standalone project (kept out of the MovieMania repo)
+aihelp/
