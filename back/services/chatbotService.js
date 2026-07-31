@@ -11,6 +11,7 @@
 // ============================================================================
 
 const { pool } = require('../pool');
+const gemini = require('./geminiService');
 
 // Small logger so we can see exactly what the chatbot is doing in the console.
 function debug(...args) {
@@ -403,8 +404,20 @@ function specialistHelp() {
   };
 }
 
-function specialistUnknown() {
-  debug('specialist.unknown');
+// Free-form / unknown questions fall back to the Gemini LLM (with the live
+// movie database as context). If Gemini is unavailable, return a canned reply.
+async function specialistUnknown(message, movies, history) {
+  debug('specialist.unknown -> trying Gemini');
+  try {
+    const context = gemini.buildMovieContext(movies);
+    const text = await gemini.generateReply({ message, history, movieContext: context });
+    if (text) {
+      debug('Gemini replied with', text.length, 'chars');
+      return { reply: text, data: { gemini: true } };
+    }
+  } catch (err) {
+    debug('Gemini failed, using fallback:', err.message);
+  }
   return {
     reply:
       "Hmm, I'm not sure how to answer that yet. 🤔 Try asking about a movie's rating, release date, budget, or runtime. Or ask which movies are better rated.",
@@ -474,7 +487,7 @@ async function answerMessage(message, history = []) {
     highest_grossing: () => specialistHighestGrossing(movies),
     compare: () => specialistCompare(movie, movieB),
     help: specialistHelp,
-    unknown: specialistUnknown,
+    unknown: () => specialistUnknown(message, movies, history),
   };
 
   const handler = specialists[intent] || specialistUnknown;

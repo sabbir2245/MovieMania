@@ -30,7 +30,9 @@ async function createCheckoutSession({ username, amount, frontendURL }) {
 
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
-    payment_method_types: ['card'],
+    // Disable Managed Payments so classic Checkout doesn't require a product
+    // tax_code / payment_method_types restrictions.
+    managed_payments: { enabled: false },
     line_items: [
       {
         price_data: {

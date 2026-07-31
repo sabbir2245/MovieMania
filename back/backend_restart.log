@@ -3,24 +3,43 @@
 👥 User-based notifications enabled
 🌐 Frontend URL: http://localhost:5001
 📡 Socket CORS Origin: http://localhost:5001
-[DEBUG chatbot] GET /api/chat/health
-Fetching top rated movies
-Fetching top rated movies
-Fetching top grossing movies
-Found 10 top grossing movies
-Fetching top grossing movies
-Found 10 top grossing movies
-Fetching similar movies for movie ID: 21
-Found 5 highest matching similar movies
-Fetching similar movies for movie ID: 21
-Found 5 highest matching similar movies
-Fetching top rated movies
-Fetching top rated movies
-Query parameters: [ 'nice', 1200, 0 ]
-Search "nice" (movie): Found 1 total results, showing page 1
-Query parameters: [ 'nice', 1200, 0 ]
-Search "nice" (movie): Found 1 total results, showing page 1
-Fetching similar movies for movie ID: 50
-Found 0 highest matching similar movies
-Fetching similar movies for movie ID: 50
-Found 0 highest matching similar movies
+[DEBUG chatbot] POST /api/chat | message: "recommend me a good sci-fi movie from the catalog"
+[DEBUG chatbot] === answerMessage ===
+[DEBUG chatbot] incoming message: recommend me a good sci-fi movie from the catalog
+[DEBUG chatbot] history length: 0
+[DEBUG chatbot] fetching movie dataset from DB...
+[DEBUG chatbot] fetched 33 movies
+[DEBUG chatbot] classifyIntent: analyzing message: "recommend me a good sci-fi movie from the catalog"
+[DEBUG chatbot] findMovie: looking for a title inside query: "recommend me a good sci-fi movie from the catalog"
+[DEBUG chatbot] findMovie result: "Test Movie 123" (fuzzy, score 1)
+[DEBUG chatbot] findMovie: looking for a title inside query: "recommend me a good sci-fi   from the catalog"
+[DEBUG chatbot] findMovie result: NO MATCH 
+[DEBUG chatbot] findMovie: looking for a title inside query: "recommend me a good sci-fi movie from the catalog"
+[DEBUG chatbot] findMovie result: "Test Movie 123" (fuzzy, score 1)
+[DEBUG chatbot] classifyIntent -> intent: movie_info | rule: title present, default to movie_info
+[DEBUG chatbot] findMovie: looking for a title inside query: "recommend me a good sci-fi movie from the catalog"
+[DEBUG chatbot] findMovie result: "Test Movie 123" (fuzzy, score 1)
+[DEBUG chatbot] dispatching to specialist: movie_info
+[DEBUG chatbot] specialist.rating for Test Movie 123
+[DEBUG chatbot] reply preview: 🎬 Test Movie 123 has a rating of N/A/10 ....
+[DEBUG chatbot] === answerMessage done ===
+[DEBUG chatbot] responding with intent: movie_info
+[DEBUG chatbot] POST /api/chat | message: "what is the rating of gladiator"
+[DEBUG chatbot] === answerMessage ===
+[DEBUG chatbot] incoming message: what is the rating of gladiator
+[DEBUG chatbot] history length: 0
+[DEBUG chatbot] fetching movie dataset from DB...
+[DEBUG chatbot] fetched 33 movies
+[DEBUG chatbot] classifyIntent: analyzing message: "what is the rating of gladiator"
+[DEBUG chatbot] findMovie: looking for a title inside query: "what is the rating of gladiator"
+[DEBUG chatbot] findMovie result: "Gladiator" (exact)
+[DEBUG chatbot] findMovie: looking for a title inside query: "what is the rating of  "
+[DEBUG chatbot] findMovie result: NO MATCH 
+[DEBUG chatbot] classifyIntent -> intent: rating | rule: /rating|rated|score|stars?\b|\bhow good/i
+[DEBUG chatbot] findMovie: looking for a title inside query: "what is the rating of gladiator"
+[DEBUG chatbot] findMovie result: "Gladiator" (exact)
+[DEBUG chatbot] dispatching to specialist: rating
+[DEBUG chatbot] specialist.rating for Gladiator
+[DEBUG chatbot] reply preview: 🎬 Gladiator has a rating of 6.00/10 (based on 1 votes)....
+[DEBUG chatbot] === answerMessage done ===
+[DEBUG chatbot] responding with intent: rating
