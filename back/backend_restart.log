@@ -43,3 +43,63 @@
 [DEBUG chatbot] reply preview: 🎬 Gladiator has a rating of 6.00/10 (based on 1 votes)....
 [DEBUG chatbot] === answerMessage done ===
 [DEBUG chatbot] responding with intent: rating
+[DEBUG chatbot] POST /api/chat | message: "who are you and what can you do"
+[DEBUG chatbot] === answerMessage ===
+[DEBUG chatbot] incoming message: who are you and what can you do
+[DEBUG chatbot] history length: 0
+[DEBUG chatbot] fetching movie dataset from DB...
+[DEBUG chatbot] fetched 33 movies
+[DEBUG chatbot] classifyIntent: analyzing message: "who are you and what can you do"
+[DEBUG chatbot] findMovie: looking for a title inside query: "who are you and what can you do"
+[DEBUG chatbot] findMovie result: NO MATCH 
+[DEBUG chatbot] findMovie: looking for a title inside query: "who are you and what can you do"
+[DEBUG chatbot] findMovie result: NO MATCH 
+[DEBUG chatbot] classifyIntent -> intent: unknown | rule: no rules matched
+[DEBUG chatbot] findMovie: looking for a title inside query: "who are you and what can you do"
+[DEBUG chatbot] findMovie result: NO MATCH 
+[DEBUG chatbot] dispatching to specialist: unknown
+[DEBUG chatbot] specialist.unknown -> trying Gemini
+[DEBUG chatbot] Gemini replied with 178 chars
+[DEBUG chatbot] reply preview: Hi there! I'm your friendly MovieMania assistant. I can help you with questions ...
+[DEBUG chatbot] === answerMessage done ===
+[DEBUG chatbot] responding with intent: unknown
+[DEBUG chatbot] POST /api/chat | message: "tell me a joke about movies"
+[DEBUG chatbot] === answerMessage ===
+[DEBUG chatbot] incoming message: tell me a joke about movies
+[DEBUG chatbot] history length: 0
+[DEBUG chatbot] fetching movie dataset from DB...
+[DEBUG chatbot] fetched 33 movies
+[DEBUG chatbot] classifyIntent: analyzing message: "tell me a joke about movies"
+[DEBUG chatbot] findMovie: looking for a title inside query: "tell me a joke about movies"
+[DEBUG chatbot] findMovie result: "ok" (exact)
+[DEBUG chatbot] findMovie: looking for a title inside query: "tell me a joke about movies"
+[DEBUG chatbot] findMovie result: "ok" (exact)
+[DEBUG chatbot] classifyIntent -> intent: plot | rule: /\babout\b|plot|story|what is it (about|based)|synopsis/i
+[DEBUG chatbot] findMovie: looking for a title inside query: "tell me a joke about movies"
+[DEBUG chatbot] findMovie result: "ok" (exact)
+[DEBUG chatbot] dispatching to specialist: plot
+[DEBUG chatbot] specialist.plot for ok
+[DEBUG chatbot] reply preview: 📖 ok: kjhk...
+[DEBUG chatbot] === answerMessage done ===
+[DEBUG chatbot] responding with intent: plot
+[DEBUG chatbot] POST /api/chat | message: "recommend a drama movie"
+[DEBUG chatbot] === answerMessage ===
+[DEBUG chatbot] incoming message: recommend a drama movie
+[DEBUG chatbot] history length: 0
+[DEBUG chatbot] fetching movie dataset from DB...
+[DEBUG chatbot] fetched 33 movies
+[DEBUG chatbot] classifyIntent: analyzing message: "recommend a drama movie"
+[DEBUG chatbot] findMovie: looking for a title inside query: "recommend a drama movie"
+[DEBUG chatbot] findMovie result: "Test Movie 123" (fuzzy, score 1)
+[DEBUG chatbot] findMovie: looking for a title inside query: "recommend a drama  "
+[DEBUG chatbot] findMovie result: NO MATCH 
+[DEBUG chatbot] findMovie: looking for a title inside query: "recommend a drama movie"
+[DEBUG chatbot] findMovie result: "Test Movie 123" (fuzzy, score 1)
+[DEBUG chatbot] classifyIntent -> intent: movie_info | rule: title present, default to movie_info
+[DEBUG chatbot] findMovie: looking for a title inside query: "recommend a drama movie"
+[DEBUG chatbot] findMovie result: "Test Movie 123" (fuzzy, score 1)
+[DEBUG chatbot] dispatching to specialist: movie_info
+[DEBUG chatbot] specialist.rating for Test Movie 123
+[DEBUG chatbot] reply preview: 🎬 Test Movie 123 has a rating of N/A/10 ....
+[DEBUG chatbot] === answerMessage done ===
+[DEBUG chatbot] responding with intent: movie_info
