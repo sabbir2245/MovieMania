@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { io } from 'socket.io-client';
+import { API_URL } from '../config';
 
 const useNotifications = (user) => {
   const [notifications, setNotifications] = useState([]);
@@ -102,7 +103,7 @@ const useNotifications = (user) => {
 
 
     // Get server URL from environment variables
-    const serverUrl = process.env.REACT_APP_SOCKET_URL || process.env.REACT_APP_SERVER_URL || 'http://localhost:3000';
+    const serverUrl = API_URL;
 
     // Socket.IO connection with configuration
     const newSocket = io(serverUrl, {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-const API_URL = 'http://localhost:3000/api/editor';
+import { API_URL } from '../config';
+const EDITOR_URL = `${API_URL}/api/editor`;
 
 function getToken() {
   const token = localStorage.getItem('token');
@@ -33,7 +34,7 @@ function EditorPage({ loggedInUser }) {
 
   // Fetch users on mount and after ban
   const fetchUsers = () => {
-    fetch('http://localhost:3000/api/editor/users')
+    fetch(`${API_URL}/api/editor/users`)
       .then(res => res.json())
       .then(data => setUsers(Array.isArray(data) ? data : (data.users || [])));
   };
@@ -44,7 +45,7 @@ function EditorPage({ loggedInUser }) {
   // Ban (delete) a user
   const handleBanUser = async username => {
     if (!window.confirm(`Are you sure you want to ban (delete) user '${username}'?`)) return;
-    const res = await fetch(`${API_URL}/ban/${username}`, { method: 'DELETE' });
+    const res = await fetch(`${EDITOR_URL}/ban/${username}`, { method: 'DELETE' });
     const data = await res.json();
     setMessage(data.message || data.error);
     fetchUsers();
@@ -52,13 +53,13 @@ function EditorPage({ loggedInUser }) {
 
   // Load movies on mount
   useEffect(() => {
-    fetch('http://localhost:3000/api/movies')
+    fetch(`${API_URL}/api/movies`)
       .then(res => res.json())
       .then(data => setMovies(Array.isArray(data) ? data : (data.movies || [])));
   }, []);
   // Reload movies after add/edit/delete
   const reloadMovies = () => {
-    fetch('http://localhost:3000/api/movies')
+    fetch(`${API_URL}/api/movies`)
       .then(res => res.json())
       .then(data => setMovies(Array.isArray(data) ? data : (data.movies || [])));
   };
@@ -74,7 +75,7 @@ function EditorPage({ loggedInUser }) {
     e.preventDefault();
     setMessage('');
     const method = editId ? 'PUT' : 'POST';
-    const url = editId ? `${API_URL}/edit/${editId}` : `${API_URL}/add`;
+    const url = editId ? `${EDITOR_URL}/edit/${editId}` : `${EDITOR_URL}/add`;
 
     const payload = {
       title: form.title,
@@ -110,7 +111,7 @@ function EditorPage({ loggedInUser }) {
   // Delete movie
   const handleDelete = async id => {
     if (!window.confirm('Delete this movie?')) return;
-    const res = await fetch(`${API_URL}/delete/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${EDITOR_URL}/delete/${id}`, { method: 'DELETE' });
     const data = await res.json();
     setMessage(data.message || data.error);
     reloadMovies();
@@ -136,7 +137,7 @@ function EditorPage({ loggedInUser }) {
       const formData = new FormData();
       formData.append('poster', posterFile);
 
-      const res = await fetch(`${API_URL}/upload-poster`, {
+      const res = await fetch(`${EDITOR_URL}/upload-poster`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

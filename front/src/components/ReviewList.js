@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 import '../styles/ReviewList.css';
+import { API_URL } from '../config';
 
 function ReviewList() {
   const { id } = useParams();
@@ -22,11 +23,11 @@ function ReviewList() {
   useEffect(() => {
     async function fetchMovieAndReviews() {
       try {
-        const movieRes = await fetch(`http://localhost:3000/api/movies/${id}`);
+        const movieRes = await fetch(`${API_URL}/api/movies/${id}`);
         const movieData = await movieRes.json();
         setMovie(movieData);
 
-        const reviewRes = await fetch(`http://localhost:3000/api/reviews/movie/${id}`);
+        const reviewRes = await fetch(`${API_URL}/api/reviews/movie/${id}`);
         const reviewData = await reviewRes.json();
         setReviews(reviewData);
       } catch (err) {
@@ -58,7 +59,7 @@ function ReviewList() {
     setReactionLoading(prev => ({ ...prev, [reviewId]: true }));
 
     try {
-      const res = await fetch(`http://localhost:3000/api/reviews/${reviewId}/react`, {
+      const res = await fetch(`${API_URL}/api/reviews/${reviewId}/react`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, username: currentUsername }),

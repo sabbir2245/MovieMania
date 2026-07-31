@@ -1,5 +1,6 @@
 // src/components/Signin.js
 import React, { useState } from 'react';
+import { API_URL } from '../config';
 
 function Signin({ onLogin }) {
   const [username, setUsername] = useState('');
@@ -9,7 +10,7 @@ function Signin({ onLogin }) {
   const handleSignin = async () => {
     console.log('[DEBUG] handleSignin called | username:', username);
     try {
-      const res = await fetch('http://localhost:3000/auth/signin', {
+      const res = await fetch(`${API_URL}/auth/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

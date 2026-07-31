@@ -8,6 +8,7 @@ import MovieCast from './MovieCast';
 import MovieGenres from './MovieGenres';
 
 import { useUser } from '../contexts/UserContext';
+import { API_URL } from '../config';
 import SimilarMovies from './SimilarMovies';
 
 // Helper to extract video ID from YouTube URL
@@ -55,7 +56,7 @@ function MovieDetails() {
   useEffect(() => {
     async function fetchMovie() {
       try {
-        const res = await fetch(`http://localhost:3000/api/movies/${id}`);
+        const res = await fetch(`${API_URL}/api/movies/${id}`);
         if (!res.ok) throw new Error('Movie not found');
         const data = await res.json();
         setMovie(data);
@@ -74,7 +75,7 @@ function MovieDetails() {
       if (!loggedInUser) return;
 
       try {
-        const res = await fetch(`http://localhost:3000/api/reviews/movie/${id}/user/${loggedInUser.username}`);
+        const res = await fetch(`${API_URL}/api/reviews/movie/${id}/user/${loggedInUser.username}`);
         if (res.ok) {
           const data = await res.json();
           if (data) setUserReview(data); // If review exists
@@ -93,7 +94,7 @@ function MovieDetails() {
     async function fetchWatchlists() {
       if (!loggedInUser) return;
       try {
-        const res = await fetch(`http://localhost:3000/api/watchlists/user/${loggedInUser.username}`);
+        const res = await fetch(`${API_URL}/api/watchlists/user/${loggedInUser.username}`);
         const data = await res.json();
         setWatchlists(data);
       } catch (err) {
@@ -106,7 +107,7 @@ function MovieDetails() {
   const handleAdd = async (watchlistId, listname) => {
     if (!loggedInUser) return alert('Please sign in');
     try {
-      const res = await fetch('http://localhost:3000/api/watchlists/add-movie', {
+      const res = await fetch(`${API_URL}/api/watchlists/add-movie`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ watchlist_id: watchlistId, movie_id: movie.id }),
@@ -124,7 +125,7 @@ function MovieDetails() {
 
     setRemovingFromListId(watchlistId);
     try {
-      const res = await fetch(`http://localhost:3000/api/watchlists/${watchlistId}/movies/${movie.id}`, {
+      const res = await fetch(`${API_URL}/api/watchlists/${watchlistId}/movies/${movie.id}`, {
         method: 'DELETE',
       });
       const data = await res.json();
@@ -146,7 +147,7 @@ function MovieDetails() {
     if (!window.confirm('Are you sure you want to delete your review?')) return;
 
     try {
-      const res = await fetch(`http://localhost:3000/api/reviews/movie/${movie.id}/user/${loggedInUser.username}`, {
+      const res = await fetch(`${API_URL}/api/reviews/movie/${movie.id}/user/${loggedInUser.username}`, {
         method: 'DELETE',
       });
 
@@ -170,7 +171,7 @@ function MovieDetails() {
     if (selectedRating === 0) return alert("Please select a rating.");
 
     try {
-      const res = await fetch('http://localhost:3000/api/reviews', {
+      const res = await fetch(`${API_URL}/api/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

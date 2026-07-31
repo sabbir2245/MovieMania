@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../config';
 
 const SimilarMovies = ({ movieId }) => {
   const [similarMovies, setSimilarMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const SERVER_BASE_URL = 'http://localhost:3000';
+  const SERVER_BASE_URL = API_URL;
 
   useEffect(() => {
     if (movieId) {

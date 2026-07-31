@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // for navigation
+import { API_URL } from '../config';
 
 function MovieGenres({ movieId }) {
   const [genres, setGenres] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/genres/movie/${movieId}`)
+    fetch(`${API_URL}/api/genres/movie/${movieId}`)
       .then(res => res.json())
       .then(data => setGenres(data.genres || []))
       .catch(err => {

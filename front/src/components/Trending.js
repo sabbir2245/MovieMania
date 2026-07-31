@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/trending.css'; // Import your CSS for styling
+import { API_URL } from '../config';
 
 
 
@@ -10,7 +11,7 @@ function TrendingMovies() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/movies/trending')
+    fetch(`${API_URL}/api/movies/trending`)
       .then((res) => res.json())
       .then((data) => {
         setTrending(data);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import MovieList from './MovieList';
+import { API_URL } from '../config';
 
 function MoviesByGenrePage() {
   const { name } = useParams();
@@ -13,7 +14,7 @@ function MoviesByGenrePage() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`http://localhost:3000/api/genres/genre/${name}`);
+        const res = await fetch(`${API_URL}/api/genres/genre/${name}`);
         if (!res.ok) throw new Error('Failed to fetch movies');
         const data = await res.json();
         setMovies(data.movies || []);

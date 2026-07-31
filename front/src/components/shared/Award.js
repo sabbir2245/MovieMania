@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { API_URL } from '../../config';
 
 function MovieAwardsBox({ movieId }) {
   const [awards, setAwards] = useState([]);
@@ -8,7 +9,7 @@ function MovieAwardsBox({ movieId }) {
   useEffect(() => {
     async function fetchAwards() {
       try {
-       const res = await fetch(`http://localhost:3000/api/movies/${movieId}/awards`);
+       const res = await fetch(`${API_URL}/api/movies/${movieId}/awards`);
 
         if (!res.ok) throw new Error('Failed to fetch awards');
         const data = await res.json();

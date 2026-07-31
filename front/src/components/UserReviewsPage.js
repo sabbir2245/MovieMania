@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styles/UserReviewsPage.css';
+import { API_URL } from '../config';
 
 function UserReviewsPage() {
   const { username } = useParams();
@@ -10,7 +11,7 @@ function UserReviewsPage() {
   useEffect(() => {
     async function fetchReviews() {
       try {
-        const res = await fetch(`http://localhost:3000/api/reviews/user/${username}`);
+        const res = await fetch(`${API_URL}/api/reviews/user/${username}`);
         const data = await res.json();
         setReviews(data);
       } catch (err) {

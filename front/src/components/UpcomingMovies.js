@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MovieCard from './shared/MovieCard'; // Reuse your existing MovieCard
 import LoadingComponent from './shared/LoadingComponent'; // Optional loading spinner
+import { API_URL } from '../config';
 
 function UpcomingMovies() {
   const [upcomingMovies, setUpcomingMovies] = useState([]);
@@ -9,7 +10,7 @@ function UpcomingMovies() {
   useEffect(() => {
     const fetchUpcoming = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/movies/upcoming');
+        const res = await fetch(`${API_URL}/api/movies/upcoming`);
         const data = await res.json();
 
          console.log('Fetched upcoming movies:', data);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/UserPage.css';
+import { API_URL } from '../config';
 
 function UserPage({ user, onLogout }) {
   const [watchlists, setWatchlists] = useState([]);
@@ -18,7 +19,7 @@ function UserPage({ user, onLogout }) {
   useEffect(() => {
     if (!user) return;
 
-    fetch(`http://localhost:3000/api/watchlists/user/${user.username}`)
+    fetch(`${API_URL}/api/watchlists/user/${user.username}`)
       .then(res => res.json())
       .then(data => setWatchlists(data))
       .catch(err => console.error('Failed to load watchlists:', err));
@@ -32,7 +33,7 @@ function UserPage({ user, onLogout }) {
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/api/watchlists/add', {
+      const response = await fetch(`${API_URL}/api/watchlists/add`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -64,7 +65,7 @@ function UserPage({ user, onLogout }) {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/watchlists/user/${user.username}/watchlist/${id}`, {
+      const response = await fetch(`${API_URL}/api/watchlists/user/${user.username}/watchlist/${id}`, {
         method: 'DELETE',
       });
 
@@ -91,7 +92,7 @@ function UserPage({ user, onLogout }) {
     setSearchResults(null);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/watchlists/search?text=${encodeURIComponent(searchTerm)}`);
+      const response = await fetch(`${API_URL}/api/watchlists/search?text=${encodeURIComponent(searchTerm)}`);
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }

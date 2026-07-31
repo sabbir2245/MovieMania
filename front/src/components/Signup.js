@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_URL } from '../config';
 
 function Signup() {
   const [form, setForm] = useState({
@@ -22,7 +23,7 @@ function Signup() {
     }
 
     try {
-      const res = await fetch('http://localhost:3000/auth/signup', {
+      const res = await fetch(`${API_URL}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),

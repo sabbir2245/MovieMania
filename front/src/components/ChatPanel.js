@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { API_URL } from '../config';
 
-const API_URL = 'http://localhost:3000/api/chat';
+const CHAT_URL = `${API_URL}/api/chat`;
 
 const SUGGESTIONS = [
   'What is the rating of The Batman?',
@@ -41,7 +42,7 @@ function ChatPanel({ variant = 'mini' }) {
       .map((m) => ({ role: m.role, content: m.content }));
 
     try {
-      const res = await fetch(API_URL, {
+      const res = await fetch(CHAT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: trimmed, history }),

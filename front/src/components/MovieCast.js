@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/MovieCast.css'; // optional styling
+import { API_URL } from '../config';
 
 function MovieCast({ movieId }) {
   const [cast, setCast] = useState([]);
@@ -13,7 +14,7 @@ function MovieCast({ movieId }) {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`http://localhost:3000/api/movie-persons/movies/${movieId}/cast`)
+        const res = await fetch(`${API_URL}/api/movie-persons/movies/${movieId}/cast`)
 ;
         if (!res.ok) throw new Error('Failed to fetch cast');
         const data = await res.json();

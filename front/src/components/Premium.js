@@ -2,8 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import '../styles/Premium.css';
+import { API_URL } from '../config';
 
-const API_BASE = 'http://localhost:3000';
+const API_BASE = API_URL;
 
 function getToken() {
   // JWT saved on sign-in by Signin.js

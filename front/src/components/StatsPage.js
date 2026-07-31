@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import '../styles/stats.css';
+import { API_URL } from '../config';
 
 function StatsPage() {
   const { id } = useParams();
@@ -11,7 +12,7 @@ function StatsPage() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const res = await fetch(`http://localhost:3000/api/movies/${id}/insights`);
+        const res = await fetch(`${API_URL}/api/movies/${id}/insights`);
         if (!res.ok) throw new Error('Failed to load stats');
         const data = await res.json();
         setMovieData(data);

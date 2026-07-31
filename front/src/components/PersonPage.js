@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styles/PersonPage.css'; // You can create styling separately
 import { Link } from 'react-router-dom';
+import { API_URL } from '../config';
 
 function calculateAge(birthdate) {
   if (!birthdate) return 'Unknown';
@@ -22,7 +23,7 @@ function PersonPage() {
   useEffect(() => {
     async function fetchPersonDetails() {
       try {
-        const res = await fetch(`http://localhost:3000/api/movie-persons/person/${personId}`)
+        const res = await fetch(`${API_URL}/api/movie-persons/person/${personId}`)
 ;
         const data = await res.json();
         setPerson(data.person);

@@ -6,6 +6,7 @@ import MovieCard from './shared/MovieCard.js';
 import LoadingComponent from './shared/LoadingComponent';
 import ErrorComponent from './shared/ErrorComponent';
 import EmptyState from './shared/EmptyState';
+import { API_URL } from '../config';
 
 const HomePage = () => {
   const [topRatedMovies, setTopRatedMovies] = useState([]);
@@ -15,7 +16,7 @@ const HomePage = () => {
   const [error, setError] = useState(null);
   const [showTopUsers, setShowTopUsers] = useState(false);
 
-  const SERVER_BASE_URL = 'http://localhost:3000';
+  const SERVER_BASE_URL = API_URL;
   
   useEffect(() => {
     fetchTopMovies();

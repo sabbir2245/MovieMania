@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "../styles/TopUsers.css";
+import { API_URL } from '../config';
 
 
 function TopUsers() {
@@ -7,7 +8,7 @@ function TopUsers() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/reviews/top-users')
+    fetch(`${API_URL}/api/reviews/top-users`)
       .then(res => res.json())
       .then(data => setUsers(data))
       .catch(err => console.error(err))

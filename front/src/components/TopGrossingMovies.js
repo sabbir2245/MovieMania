@@ -3,6 +3,7 @@ import MovieCard from './shared/MovieCard';
 import LoadingComponent from './shared/LoadingComponent';
 import ErrorComponent from './shared/ErrorComponent';
 import EmptyState from './shared/EmptyState';
+import { API_URL } from '../config';
 
 const TopGrossingMovies = () => {
   const [topGrossingMovies, setTopGrossingMovies] = useState([]);
@@ -12,7 +13,7 @@ const TopGrossingMovies = () => {
   const sliderRef = useRef(null);
   const autoSlideRef = useRef(null);
 
-  const SERVER_BASE_URL = 'http://localhost:3000';
+  const SERVER_BASE_URL = API_URL;
 
   // Movies per slide based on screen size
   const getMoviesPerSlide = () => {

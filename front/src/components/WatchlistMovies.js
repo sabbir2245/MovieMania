@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import MovieList from './MovieList'; // reuse your movie grid display component
+import { API_URL } from '../config';
 
 
 
@@ -13,7 +14,7 @@ function WatchlistMovies() {
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const res = await fetch(`http://localhost:3000/api/watchlists/${watchlistId}/movies`);
+        const res = await fetch(`${API_URL}/api/watchlists/${watchlistId}/movies`);
         const data = await res.json();
         setMovies(data);
       } catch (err) {
@@ -25,7 +26,7 @@ function WatchlistMovies() {
 
   async function fetchListName() {
   try {
-    const res = await fetch(`http://localhost:3000/api/watchlists/${watchlistId}`);
+    const res = await fetch(`${API_URL}/api/watchlists/${watchlistId}`);
     const data = await res.json();
     setListname(data.listname || '');
   } catch (err) {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import MovieCard from './shared/MovieCard';
 import LoadingComponent from './shared/LoadingComponent';
+import { API_URL } from '../config';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -49,7 +50,7 @@ function SearchResults() {
     if (page !== 1) params.append('page', page);
     params.append('limit', 1200);
 
-    return `http://localhost:3000/api/movies/search?${params.toString()}`;
+    return `${API_URL}/api/movies/search?${params.toString()}`;
   };
 
   useEffect(() => {
@@ -66,14 +67,14 @@ function SearchResults() {
   }, [searchTerm, searchType, startYear, endYear, minRating, maxRating, genres, actors, sortBy, sortOrder, page]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/genres')
+    fetch(`${API_URL}/api/genres`)
       .then(res => res.json())
       .then(data => setAllGenres(data.genres || []))
       .catch(() => setAllGenres([]));
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/movie-persons/persons')
+    fetch(`${API_URL}/api/movie-persons/persons`)
       .then(res => res.json())
       .then(data => setPersons(data))
       .catch(() => setPersons([]));
