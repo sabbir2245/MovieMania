@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test --test-force-exit back/test/backend.test.js back/test/chatbot.test.js",
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node server.js",
-    "server:dev": "nodemon server.js",
+    "server": "node back/server.js",
+    "server:dev": "nodemon back/server.js",
     "client": "cd front && npm start",
     "dev": "concurrently \"npm run server:dev\" \"npm run client\"",
     "install-all": "npm install && cd front && npm install",
@@ -17,18 +17,24 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "bcryptjs": "^3.0.2",
     "chart.js": "^4.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.1",
     "node-cron": "^3.0.3",
     "pg": "^8.16.2",
     "recharts": "^3.1.0",
+    "resend": "^4.4.0",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "concurrently": "^9.2.0",
-    "nodemon": "^3.0.0"
+    "mock-require": "^3.0.3",
+    "nodemon": "^3.0.0",
+    "supertest": "^7.1.1"
   }
 }

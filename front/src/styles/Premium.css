@@ -1,0 +1,195 @@
+/* =========================================================
+   MovieMania Premium - modern light-blue theme, boxy corners
+   ========================================================= */
+
+.premium-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 20px;
+  min-height: 70vh;
+  background: linear-gradient(135deg, #eef4ff 0%, #dbe9ff 100%);
+}
+
+.premium-card {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border: 2px solid #b6d4ff;
+  /* boxy square corners */
+  border-radius: 0;
+  box-shadow: 8px 8px 0 rgba(59, 130, 246, 0.25);
+  padding: 36px 32px;
+}
+
+.premium-title {
+  margin: 0 0 8px;
+  font-size: 34px;
+  font-weight: 800;
+  color: #0b2a4a;
+}
+
+.premium-title span {
+  color: #1d7af2;
+}
+
+.premium-subtitle {
+  margin: 0 0 24px;
+  color: #4a6b8a;
+  font-weight: 500;
+}
+
+/* Notice banner (from bKash redirect) */
+.notice {
+  padding: 14px 16px;
+  border: 2px solid;
+  border-radius: 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+.notice.success {
+  background: #e7f8ee;
+  border-color: #2bb673;
+  color: #11633a;
+}
+.notice.error {
+  background: #ffecec;
+  border-color: #ef4444;
+  color: #9b1c1c;
+}
+
+/* Status box */
+.status-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  background: #f2f7ff;
+  border: 2px solid #b6d4ff;
+  border-radius: 0;
+  margin-bottom: 20px;
+}
+.status-label {
+  font-weight: 700;
+  color: #0b2a4a;
+}
+.badge {
+  padding: 6px 14px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border: 2px solid;
+  border-radius: 0;
+}
+.badge-premium {
+  background: #ffd666;
+  border-color: #e0a800;
+  color: #5c4300;
+}
+.badge-free {
+  background: #e5e9f0;
+  border-color: #9aa7b8;
+  color: #3c4653;
+}
+.status-meta {
+  font-size: 13px;
+  color: #6b7f94;
+}
+
+.error-box {
+  background: #ffecec;
+  border: 2px solid #ef4444;
+  border-radius: 0;
+  color: #9b1c1c;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+/* Buy section */
+.buy-section {
+  text-align: center;
+}
+.price {
+  font-size: 40px;
+  font-weight: 800;
+  color: #0b2a4a;
+  margin: 8px 0 20px;
+}
+.price span {
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b7f94;
+}
+
+/* Buttons - boxy square corners */
+.btn-primary {
+  background: #1d7af2;
+  color: #fff;
+  border: 2px solid #0b5ec4;
+  border-radius: 0;
+  padding: 14px 22px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 4px 4px 0 rgba(13, 90, 200, 0.35);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.btn-primary:hover {
+  background: #1669d6;
+}
+.btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(13, 90, 200, 0.35);
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: #1d7af2;
+  border: 2px solid #1d7af2;
+  border-radius: 0;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+}
+.btn-secondary:hover {
+  background: #eaf2ff;
+}
+
+/* Payment info + poll result */
+.payment-info {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 2px dashed #b6d4ff;
+  text-align: left;
+  font-size: 14px;
+  color: #0b2a4a;
+}
+.payment-info code {
+  background: #f2f7ff;
+  padding: 2px 6px;
+  border: 1px solid #cfe0ff;
+}
+.payment-info a {
+  color: #1d7af2;
+}
+.poll-result {
+  background: #0b2a4a;
+  color: #9fd0ff;
+  padding: 12px;
+  border-radius: 0;
+  font-size: 12px;
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+.already-premium {
+  text-align: center;
+  font-size: 18px;
+  color: #0b2a4a;
+}

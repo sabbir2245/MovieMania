@@ -26,6 +26,9 @@ import TrendingMovies from "./components/Trending";
 import EditorPage from './components/EditorPage';
 import News from './components/News';
 import StatsPage from './components/StatsPage';
+import Premium from './components/Premium';
+import ChatPage from './components/ChatPage';
+import ChatWidget from './components/ChatWidget';
 
 
 import { UserContext } from './contexts/UserContext';
@@ -87,9 +90,12 @@ function App() {
             <Route path="/news" element={<News />} />
 
             <Route path="/editor" element={<EditorPage />} />
+            <Route path="/premium" element={<Premium />} />
         <Route path="/trending" element={<TrendingMovies />} />
             <Route path="/genres/:name" element={<MoviesByGenre />} />
 <Route path="/movies/:id/stats" element={<StatsPage />} />
+
+            <Route path="/chat" element={<ChatPage />} />
 
 
           </Routes>
@@ -98,6 +104,8 @@ function App() {
 
 
         </main>
+
+        <ChatWidget />
 
         <footer>
           <p>&copy; 2025 Moviemania. All rights reserved.</p>

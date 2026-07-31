@@ -1,0 +1,25 @@
+Assignment 2: The Capstone Project (Build Your Own SaaS)
+
+🚨 DEADLINE: Expected to be completed within 4 weeks of the course start date.
+
+Objective
+
+You have learned the complete Vibe Coding workflow. Now, it is time to take the training wheels off. Your final assignment is to look at your real life, identify a problem or a friction point, and build a SaaS application to solve it. You will start entirely from scratch. You must design your own Brand DNA, architect your database, and command your AI to build the solution.
+
+The Core Requirements
+
+To successfully complete your capstone, your application must be pushed live to production (Netlify or Vercel) and must include the foundational stack we learned in this course:
+
+· Authentication (e.g., Clerk)
+· A Relational Database (e.g., Supabase) with full CRUD operations.
+
+The Integration Challenge
+
+Real-world applications rely heavily on third-party services. To prove your agentic prompting skills, your SaaS must successfully integrate at least three (3) of the following features:
+
+· Media Management: Allow users to upload, store, and manage images (e.g., using Supabase Storage, Cloudinary, or UploadThing).
+· Video Embedding: Seamlessly fetch and play videos from YouTube within your application's UI.
+· Transactional Emails: Automatically send an email to a user when a specific action occurs in your app (e.g., using Resend to send a welcome email upon sign-up).
+· Monetization: Integrate a payment gateway to accept a one-time payment or subscription (e.g., using Stripe or Lemon Squeezy).
+· AI Intelligence: Connect to an LLM API (OpenAI, Anthropic, or Gemini) 
+to generate text, summarize data, or provide AI-driven insights directly inside your app.

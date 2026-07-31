@@ -1,7 +1,15 @@
 
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
 const {pool} = require('../pool'); // PostgreSQL connection
+const { requireEditor } = require('../middleware/auth');
+const storageService = require('../services/storageService');
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 } // 5 MB
+});
 
 router.post('/add', async (req, res) => {
   let {
@@ -9,8 +17,11 @@ router.post('/add', async (req, res) => {
     release_date,
     plot,
     budget,
+    boxoffice,
     runtime,
-    rating_label
+    rating_label,
+    poster_url,
+    trailer_link
   } = req.body;
 
   // Only require title and release_date
@@ -23,18 +34,21 @@ router.post('/add', async (req, res) => {
 
   // Convert empty strings to null for numeric fields
   budget = budget === "" ? null : budget;
+  boxoffice = boxoffice === "" ? null : boxoffice;
   runtime = runtime === "" ? null : runtime;
+  poster_url = poster_url || null;
+  trailer_link = trailer_link || null;
 
   try {
     const query = `
       INSERT INTO public."Movies"
-        (title, year, release_date, plot, budget, runtime, rating_label)
+        (title, year, release_date, plot, budget, boxoffice, runtime, rating_label, poster_url, trailer_link)
       VALUES
-        ($1, $2, $3, $4, $5, $6, $7)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING *;
     `;
     const values = [
-      title, year, release_date, plot, budget, runtime, rating_label
+      title, year, release_date, plot, budget, boxoffice, runtime, rating_label, poster_url, trailer_link
     ];
     const result = await pool.query(query, values);
     res.status(201).json({ message: 'Movie added successfully', movie: result.rows[0] });
@@ -43,6 +57,38 @@ router.post('/add', async (req, res) => {
     console.error('🔴 Error adding movie:', err.message);
     res.status(500).json({ error: 'Failed to add movie' });
   }
+});
+
+// 🔹 Upload a movie poster image to Supabase Storage (admin only)
+router.post('/upload-poster', requireEditor, (req, res) => {
+  upload.single('poster')(req, res, async (err) => {
+    if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ error: 'File too large (max 5 MB)' });
+      }
+      return res.status(400).json({ error: 'Upload error: ' + err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image file provided' });
+    }
+    if (!req.file.mimetype || !req.file.mimetype.startsWith('image/')) {
+      return res.status(400).json({ error: 'Only image files are allowed' });
+    }
+
+    try {
+      const filename = (req.file.originalname || 'poster').replace(/[^a-zA-Z0-9._-]/g, '_');
+      const { path, url } = await storageService.uploadPoster(req.file.buffer, {
+        filename,
+        contentType: req.file.mimetype,
+        upsert: true,
+      });
+      res.status(201).json({ message: 'Poster uploaded successfully', path, posterUrl: url });
+    } catch (error) {
+      console.error('🔴 Error uploading poster:', error.message);
+      res.status(500).json({ error: 'Poster upload failed', details: error.message });
+    }
+  });
 });
 
 // 🔹 Delete a movie by ID

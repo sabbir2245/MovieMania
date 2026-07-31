@@ -36,9 +36,11 @@ function Header({ loggedInUser }) {
         <Link to="/trending">Trending</Link>
 
         <Link to="/news">News</Link>
+        <Link to="/premium" className="nav-premium" title="Buy MovieMania Premium">Premium</Link>
       {loggedInUser && (loggedInUser.iseditor === true || loggedInUser.iseditor === "true" || loggedInUser.iseditor === 1 || loggedInUser.iseditor === "1") && (
-  <Link to="/editor">Edit Site</Link>
+  <Link to="/editor" className="nav-edit">🛠️ Edit Site</Link>
 )}
+      {loggedInUser && console.log('[DEBUG] Header iseditor =', loggedInUser.iseditor)}
 
       </nav>
 

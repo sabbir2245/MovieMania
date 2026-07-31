@@ -38,10 +38,12 @@ function TrendingMovies() {
                 alt={movie.title}
                 className="trending-image"
               />
-              <h3 className="trending-title">{movie.title}</h3>
-              <p className="trending-meta">Visits: {movie.visit_count/2}</p>
-              <p className="trending-meta">Rating: {movie.rating}</p>
-              <p className="trending-meta">{movie.year}</p>
+              <div className="trending-content">
+                <h3 className="trending-title">{movie.title}</h3>
+                <p className="trending-meta">Visits: <strong>{movie.visit_count/2}</strong></p>
+                <p className="trending-meta">Rating: <strong>{movie.rating}</strong></p>
+                <p className="trending-meta">{movie.year}</p>
+              </div>
             </Link>
           </li>
         ))}

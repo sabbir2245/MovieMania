@@ -215,6 +215,14 @@ function UserPage({ user, onLogout }) {
           <button className="reviews-btn">📝 Check Past Reviews</button>
         </Link>
       </div>
+
+      {(user.iseditor === true || user.iseditor === "true" || user.iseditor === 1 || user.iseditor === "1") && (
+        <div className="editor-entry">
+          <Link to="/editor" className="editor-entry-btn">
+            🛠️ Editor Panel — Add / Upload Movies
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

@@ -204,14 +204,13 @@ function MovieDetails() {
 
 
   return (
-    <div className="movie-details">
-      <div className="poster-trailer-container" style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+    <div className="mx-auto my-10 w-full max-w-6xl flex-col items-center gap-8 p-6 sm:p-8">
+      <div className="flex w-full max-w-[1100px] flex-col items-center justify-center gap-6 md:flex-row md:items-start">
         {movie.poster_url && (
           <img
             src={movie.poster_url}
             alt={movie.title}
-            className="movie-details-poster"
-            style={{ maxWidth: '300px', borderRadius: '8px' }}
+            className="w-[280px] shrink-0 rounded-xl object-contain shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-transform duration-300 hover:scale-105"
           />
         )}
 
@@ -221,29 +220,32 @@ function MovieDetails() {
             title={`${movie.title} Trailer`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            width="560"
-            height="315"
-            style={{ borderRadius: '8px' }}
+            className="aspect-video w-full shrink-0 rounded-xl border-0 shadow-[0_6px_20px_rgba(0,0,0,0.4)] md:w-[760px]"
           />
         ) : (
-          <p>No trailer available</p>
+          <p className="text-slate-300">No trailer available</p>
         )}
       </div>
 
-      <h1>{movie.title} ({movie.year})</h1>
+      <h1 className="mb-4 text-center text-3xl font-extrabold text-amber-400 sm:text-4xl">
+        {movie.title} ({movie.year})
+      </h1>
 
       <MovieGenres movieId={id} />
       <SimilarMovies movieId={movie.id} />
 
       {loggedInUser && watchlists.length > 0 && (
-        <>
-          <div className="dropdown-container">
-            <button className="dropdown-button">➕ Add to Watchlist</button>
-            <div className="dropdown-menu">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="group relative">
+            <button className="inline-flex cursor-pointer items-center gap-2 rounded-xl border-2 border-blue-700 bg-blue-600 px-4 py-2 font-semibold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-500 active:translate-y-0">
+              ➕ Add to Watchlist
+            </button>
+            <div className="pointer-events-none absolute left-0 top-[110%] z-50 min-w-[190px] rounded-xl bg-slate-100 p-2 opacity-0 shadow-2xl transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
               {watchlists.map(watchlist => (
                 <button
                   key={watchlist.id}
                   onClick={() => handleAdd(watchlist.id, watchlist.listname)}
+                  className="block w-full cursor-pointer rounded-lg px-4 py-2 text-left text-sm font-medium text-blue-900 transition hover:bg-blue-100"
                 >
                   📁 Add to {watchlist.listname}
                 </button>
@@ -251,71 +253,89 @@ function MovieDetails() {
             </div>
           </div>
 
-          <div className="dropdown-container" style={{ marginLeft: '1rem' }}>
-            <button className="dropdown-button remove">➖ Remove from Watchlist</button>
-            <div className="dropdown-menu" aria-label="Remove from watchlist options">
+          <div className="group relative">
+            <button className="inline-flex cursor-pointer items-center gap-2 rounded-xl border-2 border-red-700 bg-red-500 px-4 py-2 font-semibold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-red-600 active:translate-y-0">
+              ➖ Remove from Watchlist
+            </button>
+            <div className="pointer-events-none absolute left-0 top-[110%] z-50 min-w-[190px] rounded-xl bg-slate-100 p-2 opacity-0 shadow-2xl transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
               {watchlists.map(watchlist => (
                 <button
                   key={watchlist.id}
                   onClick={() => handleRemove(watchlist.id, watchlist.listname)}
                   disabled={removingFromListId === watchlist.id}
+                  className="block w-full cursor-pointer rounded-lg px-4 py-2 text-left text-sm font-medium text-blue-900 transition hover:bg-blue-100 disabled:cursor-not-allowed disabled:text-slate-400"
                 >
                   {removingFromListId === watchlist.id ? 'Removing...' : `📁 Remove from ${watchlist.listname}`}
                 </button>
               ))}
             </div>
           </div>
-        </>
+        </div>
       )}
 
-      <div className="movie-info-grid">
-        <div className="info-item">
-          <strong>📖 Plot:</strong>
-          <p>{movie.plot || 'No plot available.'}</p>
+      <div className="mt-6 grid w-full grid-cols-1 gap-5 sm:grid-cols-2">
+        <div className="rounded-xl bg-cyan-500 p-4 shadow-md">
+          <strong className="mb-1 block text-xl font-bold text-slate-800">📖 Plot:</strong>
+          <p className="text-slate-900">{movie.plot || 'No plot available.'}</p>
         </div>
 
-        <div className="info-item">
-          <strong>⭐ Rating:</strong>
-          <p>
+        <div className="rounded-xl bg-cyan-500 p-4 shadow-md">
+          <strong className="mb-1 block text-xl font-bold text-slate-800">⭐ Rating:</strong>
+          <p className="text-slate-900">
             {typeof movie.rating === 'number'
               ? movie.rating.toFixed(2)
               : 'N/A'} / 10
           </p>
         </div>
 
-        <div className="info-item">
-          <strong>🗳️ Votes:</strong>
-          <p>{movie.votes || 'N/A'}</p>
+        <div className="rounded-xl bg-cyan-500 p-4 shadow-md">
+          <strong className="mb-1 block text-xl font-bold text-slate-800">🗳️ Votes:</strong>
+          <p className="text-slate-900">{movie.votes || 'N/A'}</p>
         </div>
 
-        <div className="info-item">
-          <strong>⏱️ Runtime:</strong>
-          <p>{movie.runtime} minutes</p>
+        <div className="rounded-xl bg-cyan-500 p-4 shadow-md">
+          <strong className="mb-1 block text-xl font-bold text-slate-800">⏱️ Runtime:</strong>
+          <p className="text-slate-900">{movie.runtime} minutes</p>
         </div>
 
-        <div className="info-item">
-          <strong>💰 Budget:</strong>
-          <p>{movie.budget ? `$${movie.budget.toLocaleString()}` : 'N/A'}</p>
+        <div className="rounded-xl bg-cyan-500 p-4 shadow-md">
+          <strong className="mb-1 block text-xl font-bold text-slate-800">💰 Budget:</strong>
+          <p className="text-slate-900">{movie.budget ? `$${movie.budget.toLocaleString()}` : 'N/A'}</p>
         </div>
 
-        <div className="info-item">
-          <strong>🏆 Box Office:</strong>
-          <p>{movie.boxoffice ? `$${movie.boxoffice.toLocaleString()}` : 'N/A'}</p>
+        <div className="rounded-xl bg-cyan-500 p-4 shadow-md">
+          <strong className="mb-1 block text-xl font-bold text-slate-800">🏆 Box Office:</strong>
+          <p className="text-slate-900">{movie.boxoffice ? `$${movie.boxoffice.toLocaleString()}` : 'N/A'}</p>
         </div>
       </div>
 
 
-      <div className="rate-section">
-        {movie.release_date && new Date(movie.release_date) <= new Date() && (
-
-          <button onClick={() => setShowRateForm(!showRateForm)}>⭐ Rate</button>
-
-
-        )}
+      <div className="mt-6 w-full rounded border-2 border-blue-800 bg-[#122b4d] p-5 shadow-[6px_6px_0_rgba(0,20,45,0.5)]">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-xl font-extrabold text-white">
+            {userReview ? `⭐ Your review: ${userReview.rating || ''}/10` : '⭐ Rate & Review'}
+          </h3>
+          {loggedInUser ? (
+            <button
+              className="cursor-pointer rounded border-2 border-blue-800 bg-blue-600 px-5 py-2.5 font-bold text-white shadow-[4px_4px_0_rgba(13,90,200,0.35)] transition-all duration-150 hover:bg-blue-500 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0_rgba(13,90,200,0.35)]"
+              onClick={() => setShowRateForm(!showRateForm)}
+            >
+              {showRateForm ? 'Close' : userReview ? '✏️ Edit your review' : '✍️ Write a Review'}
+            </button>
+          ) : (
+            <Link
+              to="/signin"
+              className="inline-block rounded border-2 border-blue-800 bg-blue-600 px-5 py-2.5 font-bold text-white shadow-[4px_4px_0_rgba(13,90,200,0.35)] transition-all duration-150 hover:bg-blue-500 active:translate-x-0.5 active:translate-y-0.5"
+            >
+              🔒 Sign in to write a review
+            </Link>
+          )}
+        </div>
 
         {showRateForm && (
-          <div className="rate-inline-box">
-            <div className="stars">
+          <div>
+            <label className="mb-1 block text-xs font-bold uppercase tracking-wide text-blue-200">Your rating (1-10)</label>
+            <div className="my-3 flex gap-0.5 text-3xl">
               {Array.from({ length: 10 }, (_, i) => {
                 const star = i + 1;
                 const isFilled = hoverRating
@@ -325,104 +345,61 @@ function MovieDetails() {
                 return (
                   <span
                     key={star}
-                    className={`star ${isFilled ? 'filled' : ''}`}
+                    className={`cursor-pointer select-none transition-all duration-150 hover:scale-125 ${isFilled ? 'text-amber-400 drop-shadow-[0_0_6px_rgba(255,214,102,0.6)]' : 'text-slate-500'}`}
                     onMouseEnter={() => setHoverRating(star)}
                     onMouseLeave={() => setHoverRating(0)}
                     onClick={() => setSelectedRating(star)}
                   >
                     {isFilled ? '★' : '☆'}
                   </span>
-
                 );
               })}
             </div>
 
             <textarea
-              placeholder="Write your review..."
+              className="mb-4 min-h-[96px] w-full resize-y rounded border-2 border-blue-800 bg-[#0b1f3a] p-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/25"
+              placeholder="Write your review... (optional)"
               value={textReview}
               onChange={(e) => setTextReview(e.target.value)}
-              style={{ color: 'black', backgroundColor: 'white' }}
             />
 
-            <button onClick={handleSubmitReview}>Submit Review</button>
-
-
-
-            {userReview && (
+            <div className="flex flex-wrap items-center gap-3">
               <button
-                onClick={handleDeleteReview}
-                className="delete-review-button"
-                style={{ backgroundColor: '#e74c3c', color: 'white', marginLeft: '1rem', marginTop: '0.5rem' }}
+                className="cursor-pointer rounded border-2 border-emerald-700 bg-emerald-600 px-5 py-3 font-bold text-white shadow-[4px_4px_0_rgba(27,143,88,0.35)] transition-all duration-150 hover:bg-emerald-500 active:translate-x-0.5 active:translate-y-0.5"
+                onClick={handleSubmitReview}
               >
-                🗑️ Delete Your current Review
+                Submit Review
               </button>
-            )}
-
-
+              {userReview && (
+                <button
+                  className="cursor-pointer rounded border-2 border-red-700 bg-red-500 px-4 py-3 font-bold text-white shadow-[4px_4px_0_rgba(185,28,28,0.35)] transition-all duration-150 hover:bg-red-600 active:translate-x-0.5 active:translate-y-0.5"
+                  onClick={handleDeleteReview}
+                >
+                  🗑️ Delete My Review
+                </button>
+              )}
+            </div>
           </div>
         )}
-
-
-
       </div>
-         <MovieAwardsBox movieId={parseInt(id)} />
+
+      <MovieAwardsBox movieId={parseInt(id)} />
       {movie && <MovieCast movieId={movie.id} />}
-<div
-  style={{
-    display: 'flex',
-    gap: '1rem',
-    marginTop: '1rem',
-    alignItems: 'center',
-  }}
->
-  <Link
-    to={`/movies/${movie.id}/reviews`}
-    style={{
-      backgroundColor: '#007bff',
-      color: 'white',
-      padding: '0.5rem 1rem',
-      borderRadius: '6px',
-      fontWeight: '600',
-      textDecoration: 'none',
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      cursor: 'pointer',
-      minWidth: '120px',
-      fontSize: '1rem',
-      transition: 'background-color 0.2s ease',
-    }}
-    onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#0056b3')}
-    onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#007bff')}
-  >
-    📝 Check Reviews
-  </Link>
 
-  <Link to={`/movies/${movie.id}/stats`}>
-    <button
-      style={{
-        marginTop: '0',
-        backgroundColor: '#28a745',
-        color: 'white',
-        padding: '0.5rem 1rem',
-        borderRadius: '6px',
-        fontWeight: '600',
-        border: 'none',
-        cursor: 'pointer',
-        minWidth: '120px',
-        fontSize: '1rem',
-        transition: 'background-color 0.2s ease',
-      }}
-      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e7e34')}
-      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#28a745')}
-    >
-      📊 Show Stats
-    </button>
-  </Link>
-</div>
+      <div className="mt-4 flex flex-wrap items-center gap-4">
+        <Link
+          to={`/movies/${movie.id}/reviews`}
+          className="inline-flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors duration-200 no-underline hover:bg-blue-500"
+        >
+          📝 Check Reviews
+        </Link>
 
-
-
+        <Link to={`/movies/${movie.id}/stats`} className="no-underline">
+          <button className="min-w-[120px] cursor-pointer rounded-lg border-none bg-green-600 px-4 py-2 font-semibold text-white transition-colors duration-200 hover:bg-green-500">
+            📊 Show Stats
+          </button>
+        </Link>
+      </div>
     </div>
   )
 };

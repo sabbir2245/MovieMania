@@ -1,0 +1,5 @@
+🚀 Server with Socket.IO listening on port 3000
+🔔 Auto notification system is running
+👥 User-based notifications enabled
+🌐 Frontend URL: http://localhost:5001
+📡 Socket CORS Origin: http://localhost:5001
